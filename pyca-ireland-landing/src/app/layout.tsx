@@ -28,12 +28,12 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Pyca Ireland",
     description: "Empowering youth education through innovation",
-    images: ["/pyca_banner_scaled.png"],
+    images: ["/archive/pyca_banner_OLD.png"],
   },
   twitter: {
     card: "summary_large_image",
     title: "Pyca Ireland",
     description: "Empowering youth education through innovation",
-    images: ["/pyca_banner_scaled.png"],
+    images: ["/archive/pyca_banner_OLD.png"],
   },
 }
