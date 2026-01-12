@@ -1,14 +1,20 @@
 import "./globals.css"
 import type { Metadata } from "next"
+import { Inter } from "next/font/google"
 
-export default function ({
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+})
+
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
   return (
     <html lang="en">
-      <body>
+      <body className={inter.className}>
         {children}
       </body>
     </html>
@@ -22,12 +28,12 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Pyca Ireland",
     description: "Empowering youth education through innovation",
-    images: ["/pyca_banner.png"],
+    images: ["/archive/pyca_banner_OLD.png"],
   },
   twitter: {
     card: "summary_large_image",
     title: "Pyca Ireland",
     description: "Empowering youth education through innovation",
-    images: ["/pyca_banner.png"],
+    images: ["/archive/pyca_banner_OLD.png"],
   },
 }
