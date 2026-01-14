@@ -2,6 +2,9 @@
 
 .vercel
 
+# MacOS related file ignore
+.DS_Store
+
 # dependencies
 /node_modules
 /.pnp
