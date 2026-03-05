@@ -3,6 +3,14 @@ import Image from "next/image"
 export default function MainPage() {
   return (
     <main className="bg-black min-h-screen">
+      <div className="text-center bg-black border border-neutral-800 p-2">
+        
+        {(process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test') && (
+        <h1>
+          The website is currently in development/staging mode. 
+        </h1>
+        )}        
+      </div>
       <div className="min-h-screen flex justify-center px-4">
         <div className="my-8 w-full max-w-xl flex flex-col border border-neutral-800">
           
