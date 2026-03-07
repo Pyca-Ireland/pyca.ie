@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!--
+
+Pyca Ireland - "Empowering youth education through innovation"
+
+Pyca Ireland - Local development center (version 1)
+The LDC is used for in-house development, debugging, analysis and planning.
+
+-->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pyca Ireland | Local Development Center</title>
+    <link rel="icon" type="image/ico" href="https://github.com/Pyca-Ireland/pyca.ie/raw/refs/heads/main/pyca-ireland-landing/src/app/favicon.ico">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            min-height: 100vh;
+        }
+
+        .top-bar {
+            display: flex;
+            align-items: center;
+            padding: 8px 16px;
+            background-color: #000;
+            border: 1px solid #262626;
+        }
+
+        .logo {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+        }
+
+        .divider {
+            margin: 0 12px;
+            color: #525252;
+            font-size: 18px;
+        }
+
+        .title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #fff;
+        }
+
+        .title_2 {
+            font-size: 14px;
+            font-weight: 450;
+            color:#fff;
+            opacity: 80%;
+        }
+
+        .main-bar {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            flex: 1;
+            min-height: calc(100vh - 50px);
+            border: 1px solid #262626;
+            border-top: none;
+        }
+
+        .warning-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .main-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .main-paragraph {
+            font-size: 14px;
+            color: #a3a3a3;
+            max-width: 400px;
+            text-align: center;
+            line-height: 1.5;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <img src="https://raw.githubusercontent.com/Pyca-Ireland/.github/refs/heads/main/presskit/faviconpycasqaure.jpg" alt="Pyca Logo" class="logo" onclick="window.location.href='https://pyca.ie'">
+        <span class="divider">/</span>
+        <span class="title">Local Development Center</span>
+        <span class="divider">/</span>
+        <span class="title_2">No active instance found</span>
+    </div>
+    <div class="main-bar">
+        <!--
+        X01-START
+        -->
+        <span class="warning-icon">&#9888;</span>
+        <h2 class="main-title">No development server found</h2>
+        <p class="main-paragraph">If you are seeing this message, it may mean that the Pyca Ireland development server has not found your LDC instance yet. If you believe this is a mistake please contact administration.</p>
+        <!--
+        X01-END
+        -->
+    </div>
+</body>
+</html>
