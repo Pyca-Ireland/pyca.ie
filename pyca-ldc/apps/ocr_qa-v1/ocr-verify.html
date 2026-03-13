@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pyca Ireland | Local Development Center</title>
+    <link rel="icon" type="image/ico" href="https://github.com/Pyca-Ireland/pyca.ie/raw/refs/heads/main/pyca-ireland-landing/src/app/favicon.ico">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        *::-webkit-scrollbar {
+            display: none;
+        }
+
+        * {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding-top: 34px;
+        }
+
+        .top-bar {
+            display: flex;
+            align-items: center;
+            padding: 8px 16px;
+            background-color: #000;
+            border: 1px solid #262626;
+        }
+
+        .logo {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+            cursor: pointer;
+        }
+
+        .divider {
+            margin: 0 12px;
+            color: #525252;
+            font-size: 18px;
+        }
+
+        .title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #fff;
+        }
+
+        .title_2 {
+            font-size: 14px;
+            font-weight: 450;
+            color: #fff;
+            opacity: 80%;
+        }
+
+        .nav-bar {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            background-color: #0a0a0a;
+            border: 1px solid #262626;
+            border-top: none;
+            gap: 12px;
+        }
+
+        .nav-btn {
+            padding: 8px 16px;
+            background-color: #1a1a1a;
+            border: 1px solid #333;
+            color: #fff;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .nav-btn:hover {
+            background-color: #2a2a2a;
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .nav-select {
+            padding: 8px 12px;
+            background-color: #1a1a1a;
+            border: 1px solid #333;
+            color: #fff;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .nav-label {
+            font-size: 13px;
+            color: #a3a3a3;
+        }
+
+        .nav-spacer {
+            flex: 1;
+        }
+
+        .nav-info {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .main-bar {
+            display: flex;
+            flex: 1;
+            min-height: calc(100vh - 100px);
+            border: 1px solid #262626;
+            border-top: none;
+        }
+
+        .image-panel {
+            width: 70%;
+            padding: 16px;
+            border-right: 1px solid #262626;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: auto;
+            background-color: #0a0a0a;
+        }
+
+        .image-panel img {
+            max-width: 100%;
+            max-height: calc(100vh - 150px);
+            object-fit: contain;
+        }
+
+        .ocr-panel {
+            width: 30%;
+            padding: 16px;
+            overflow-y: auto;
+            background-color: #000;
+        }
+
+        .ocr-header {
+            font-size: 12px;
+            font-weight: 600;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #262626;
+        }
+
+        .ocr-textarea {
+            width: 100%;
+            height: calc(100vh - 220px);
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #e0e0e0;
+            background-color: #0a0a0a;
+            border: 1px solid #333;
+            padding: 12px;
+            resize: none;
+        }
+
+        .ocr-textarea:focus {
+            outline: none;
+            border-color: #525252;
+        }
+
+        .ocr-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .save-btn {
+            padding: 8px 16px;
+            background-color: #fff;
+            border: none;
+            color: #000;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .save-btn:hover {
+            background-color: #fff;
+        }
+
+        .save-btn:disabled {
+            background-color: #333;
+            color: #666;
+            cursor: not-allowed;
+        }
+
+        .reset-btn {
+            padding: 8px 16px;
+            background-color: #1a1a1a;
+            border: 1px solid #333;
+            color: #fff;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .reset-btn:hover {
+            background-color: #2a2a2a;
+        }
+
+        .save-status {
+            font-size: 12px;
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .save-status.success {
+            color: #22c55e;
+        }
+
+        .save-status.error {
+            color: #ef4444;
+        }
+
+        .save-status.modified {
+            color: #eab308;
+        }
+
+        .loading {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .error-msg {
+            color: #ef4444;
+            font-size: 14px;
+        }
+
+        /* Startup Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-overlay.hidden {
+            display: none;
+        }
+
+        .modal {
+            background-color: #0a0a0a;
+            border: 1px solid #333;
+            padding: 32px;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .modal-subtitle {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 24px;
+        }
+
+        .modal-field {
+            margin-bottom: 16px;
+        }
+
+        .modal-label {
+            display: block;
+            font-size: 12px;
+            color: #a3a3a3;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .modal-select {
+            width: 100%;
+            padding: 10px 12px;
+            background-color: #1a1a1a;
+            border: 1px solid #333;
+            color: #fff;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .modal-select:focus {
+            outline: none;
+            border-color: #525252;
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 10px 12px;
+            background-color: #1a1a1a;
+            border: 1px solid #333;
+            color: #fff;
+            font-size: 14px;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+        }
+
+        .modal-input:focus {
+            outline: none;
+            border-color: #525252;
+        }
+
+        .modal-input::placeholder {
+            color: #666;
+        }
+
+        .modal-dropzone {
+            border: 2px dashed #333;
+            padding: 24px;
+            text-align: center;
+            margin-bottom: 16px;
+            transition: all 0.2s;
+        }
+
+        .modal-dropzone.dragover {
+            border-color: #fff;
+            background-color: #1a1a1a;
+        }
+
+        .modal-dropzone-text {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .modal-dropzone-text strong {
+            color: #a3a3a3;
+        }
+
+        .modal-dropzone-filename {
+            font-size: 13px;
+            color: #22c55e;
+            margin-top: 8px;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+        }
+
+        .modal-or {
+            text-align: center;
+            font-size: 12px;
+            color: #525252;
+            margin: 16px 0;
+        }
+
+        .modal-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #fff;
+            border: none;
+            color: #000;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: background-color 0.2s;
+        }
+
+        .modal-btn:hover {
+            background-color: #e0e0e0;
+        }
+
+        .announcement-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            background-color: #000;
+            border-bottom: 1px solid #262626;
+            padding: 8px;
+            z-index: 2000;
+            font-size: 14px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="announcement-bar">
+        This application is designed for local development and may not act accordingly in a production deployment.
+    </div>
+
+    <!-- Startup Modal -->
+    <div class="modal-overlay" id="startupModal">
+        <div class="modal">
+            <div class="modal-title">Load Dataset</div>
+            <div class="modal-subtitle">Drag and drop a JSON file or enter the path</div>
+            <div class="modal-dropzone" id="dropzone">
+                <div class="modal-dropzone-text">
+                    <strong>Drop JSON file here</strong><br>
+                    or click to select
+                </div>
+                <div class="modal-dropzone-filename" id="dropzoneFilename"></div>
+                <input type="file" id="fileInput" accept=".json" style="display: none;">
+            </div>
+            <div class="modal-or">or enter path manually</div>
+            <div class="modal-field">
+                <label class="modal-label">File Path</label>
+                <input type="text" class="modal-input" id="filePathInput"
+                    placeholder="../image-management/ocr_results_2024-AB-HL.json">
+            </div>
+            <button class="modal-btn" onclick="startWithSelection()">Load Dataset</button>
+        </div>
+    </div>
+
+    <div class="top-bar">
+        <img src="https://raw.githubusercontent.com/Pyca-Ireland/.github/refs/heads/main/presskit/faviconpycasqaure.jpg" alt="Pyca Logo" class="logo" onclick="window.location.href='https://pyca.ie'">
+        <span class="divider">/</span>
+        <span class="title">Local Development Center</span>
+        <span class="divider">/</span>
+        <span class="title_2">OCR Verification & Reliability Assurance</span>
+    </div>
+
+    <div class="nav-bar">
+        <button class="nav-btn" id="prevBtn" onclick="prevImage()">&#8592; Prev</button>
+        <button class="nav-btn" id="nextBtn" onclick="nextImage()">Next &#8594;</button>
+
+        <span class="divider">|</span>
+
+        <span class="nav-label">Question:</span>
+        <select class="nav-select" id="questionSelect" onchange="selectQuestion()"></select>
+
+        <span class="nav-label">Page:</span>
+        <select class="nav-select" id="imageSelect" onchange="selectImage()"></select>
+
+        <span class="nav-spacer"></span>
+        <span class="nav-info" id="navInfo"></span>
+    </div>
+
+    <div class="main-bar">
+        <div class="image-panel" id="imagePanel">
+            <span class="loading">Loading...</span>
+        </div>
+        <div class="ocr-panel">
+            <div class="ocr-header">OCR Output (Editable)</div>
+            <textarea class="ocr-textarea" id="ocrText" oninput="markModified()">Loading...</textarea>
+            <div class="ocr-actions">
+                <button class="save-btn" id="saveBtn" onclick="saveOCR()">Save</button>
+                <button class="reset-btn" onclick="resetOCR()">Reset</button>
+                <button class="reset-btn" onclick="downloadJSON()">Export JSON</button>
+            </div>
+            <div class="save-status" id="saveStatus"></div>
+        </div>
+    </div>
+
+    <script>
+        let STORAGE_KEY = '';
+        let selectedFilePath = '';
+        let droppedFileData = null;
+        let droppedFileName = '';
+        let data = {};
+        let questions = [];
+        let currentQuestion = 0;
+        let currentImage = 0;
+        let originalText = '';
+        let isModified = false;
+
+        function getFilenameFromPath(path) {
+            return path.split(/[/\\]/).pop().replace('.json', '');
+        }
+
+        // Drag and drop setup
+        function setupDropzone() {
+            const dropzone = document.getElementById('dropzone');
+            const fileInput = document.getElementById('fileInput');
+
+            dropzone.addEventListener('click', () => fileInput.click());
+
+            dropzone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropzone.classList.add('dragover');
+            });
+
+            dropzone.addEventListener('dragleave', () => {
+                dropzone.classList.remove('dragover');
+            });
+
+            dropzone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropzone.classList.remove('dragover');
+                const file = e.dataTransfer.files[0];
+                if (file) handleFile(file);
+            });
+
+            fileInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) handleFile(file);
+            });
+        }
+
+        function handleFile(file) {
+            if (!file.name.endsWith('.json')) {
+                alert('Please select a JSON file');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    droppedFileData = JSON.parse(e.target.result);
+                    droppedFileName = file.name.replace('.json', '');
+                    document.getElementById('dropzoneFilename').textContent = file.name;
+                    document.getElementById('filePathInput').value = '';
+                } catch (err) {
+                    alert('Invalid JSON file');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function startWithSelection() {
+            selectedFilePath = document.getElementById('filePathInput').value.trim();
+
+            if (!droppedFileData && !selectedFilePath) {
+                alert('Please drop a file or enter a file path');
+                return;
+            }
+
+            if (droppedFileData) {
+                STORAGE_KEY = `ocr_edits_${droppedFileName}`;
+            } else {
+                STORAGE_KEY = `ocr_edits_${getFilenameFromPath(selectedFilePath)}`;
+            }
+
+            document.getElementById('startupModal').classList.add('hidden');
+            loadData();
+        }
+
+        async function loadData() {
+            // Clear localStorage on refresh
+            localStorage.removeItem(STORAGE_KEY);
+
+            try {
+                if (droppedFileData) {
+                    data = droppedFileData;
+                } else {
+                    const response = await fetch(selectedFilePath);
+                    if (!response.ok) {
+                        throw new Error(`File not found: ${selectedFilePath}`);
+                    }
+                    data = await response.json();
+                }
+
+                questions = Object.keys(data).sort((a, b) => {
+                    const numA = parseInt(a.match(/Q(\d+)/)[1]);
+                    const numB = parseInt(b.match(/Q(\d+)/)[1]);
+                    return numA - numB;
+                });
+                populateQuestionSelect();
+                updateDisplay();
+            } catch (error) {
+                document.getElementById('imagePanel').innerHTML = '<span class="error-msg">Error loading data. Use Live Server.</span>';
+                document.getElementById('ocrText').value = 'Error: ' + error.message;
+            }
+        }
+
+        function populateQuestionSelect() {
+            const select = document.getElementById('questionSelect');
+            // Auto-detect prefix from first question (everything before Q)
+            const firstQ = questions[0] || '';
+            const prefixMatch = firstQ.match(/^(.+-)/);
+            const prefix = prefixMatch ? prefixMatch[1] : '';
+            select.innerHTML = questions.map((q, i) =>
+                `<option value="${i}">${q.replace(prefix, '')}</option>`
+            ).join('');
+        }
+
+        function populateImageSelect() {
+            const select = document.getElementById('imageSelect');
+            const images = data[questions[currentQuestion]].images;
+            select.innerHTML = images.map((img, i) => {
+                const filename = img.image_pointer.split(/[/\\]/).pop();
+                return `<option value="${i}">${filename}</option>`;
+            }).join('');
+        }
+
+        function updateDisplay() {
+            if (questions.length === 0) return;
+
+            const questionData = data[questions[currentQuestion]];
+            const imageData = questionData.images[currentImage];
+
+            // Update image
+            const imagePath = '../' + imageData.image_pointer.replace(/\\/g, '/');
+            document.getElementById('imagePanel').innerHTML = `<img src="${imagePath}" alt="Question Image">`;
+
+            // Update OCR text
+            originalText = imageData.ocr_text || '';
+            document.getElementById('ocrText').value = originalText;
+            isModified = false;
+            updateSaveStatus('');
+
+            // Update selects
+            document.getElementById('questionSelect').value = currentQuestion;
+            populateImageSelect();
+            document.getElementById('imageSelect').value = currentImage;
+
+            // Update nav info
+            const totalImages = questionData.images.length;
+            document.getElementById('navInfo').textContent =
+                `Image ${currentImage + 1} of ${totalImages} | ${questions[currentQuestion]}`;
+
+            // Update button states
+            updateNavButtons();
+        }
+
+        function updateNavButtons() {
+            const questionData = data[questions[currentQuestion]];
+            const isFirst = currentQuestion === 0 && currentImage === 0;
+            const isLast = currentQuestion === questions.length - 1 &&
+                          currentImage === questionData.images.length - 1;
+
+            document.getElementById('prevBtn').disabled = isFirst;
+            document.getElementById('nextBtn').disabled = isLast;
+        }
+
+        function nextImage() {
+            const questionData = data[questions[currentQuestion]];
+            if (currentImage < questionData.images.length - 1) {
+                currentImage++;
+            } else if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                currentImage = 0;
+            }
+            updateDisplay();
+        }
+
+        function prevImage() {
+            if (currentImage > 0) {
+                currentImage--;
+            } else if (currentQuestion > 0) {
+                currentQuestion--;
+                currentImage = data[questions[currentQuestion]].images.length - 1;
+            }
+            updateDisplay();
+        }
+
+        function selectQuestion() {
+            currentQuestion = parseInt(document.getElementById('questionSelect').value);
+            currentImage = 0;
+            updateDisplay();
+        }
+
+        function selectImage() {
+            currentImage = parseInt(document.getElementById('imageSelect').value);
+            updateDisplay();
+        }
+
+        // OCR Edit functions
+        function markModified() {
+            const currentText = document.getElementById('ocrText').value;
+            isModified = currentText !== originalText;
+            if (isModified) {
+                updateSaveStatus('Unsaved changes', 'modified');
+            } else {
+                updateSaveStatus('');
+            }
+        }
+
+        function resetOCR() {
+            document.getElementById('ocrText').value = originalText;
+            isModified = false;
+            updateSaveStatus('Reset to original', 'success');
+        }
+
+        function saveOCR() {
+            const newText = document.getElementById('ocrText').value;
+            const questionKey = questions[currentQuestion];
+
+            // Update local data
+            data[questionKey].images[currentImage].ocr_text = newText;
+
+            // Save to localStorage
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+
+            originalText = newText;
+            isModified = false;
+            updateSaveStatus('Saved to browser', 'success');
+        }
+
+        function downloadJSON() {
+            const filename = droppedFileData ? droppedFileName : getFilenameFromPath(selectedFilePath);
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${filename}-NEW.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            updateSaveStatus('JSON downloaded', 'success');
+        }
+
+        function updateSaveStatus(message, type = '') {
+            const statusEl = document.getElementById('saveStatus');
+            statusEl.textContent = message;
+            statusEl.className = 'save-status ' + type;
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.target.tagName === 'TEXTAREA') return;
+            if (e.key === 'ArrowRight') nextImage();
+            if (e.key === 'ArrowLeft') prevImage();
+        });
+
+        // Ctrl+S to save
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === 's') {
+                e.preventDefault();
+                saveOCR();
+            }
+        });
+
+        // Initialize dropzone on page load
+        setupDropzone();
+    </script>
+</body>
+</html>
