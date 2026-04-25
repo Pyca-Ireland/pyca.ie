@@ -92,6 +92,46 @@ The LDC is used for in-house development, debugging, analysis and planning.
             line-height: 1.5;
         }
 
+        .docs-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 32px;
+            width: 100%;
+            max-width: 560px;
+        }
+
+        .doc-card {
+            border: 1px solid #262626;
+            padding: 16px 20px;
+            text-decoration: none;
+            display: block;
+            transition: border-color 0.15s;
+        }
+
+        .doc-card:hover { border-color: #525252; }
+
+        .doc-card-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #525252;
+            margin-bottom: 6px;
+        }
+
+        .doc-card-title {
+            font-size: 13px;
+            font-weight: 500;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+
+        .doc-card-desc {
+            font-size: 12px;
+            color: #525252;
+            line-height: 1.4;
+        }
+
     </style>
 </head>
 <body>
@@ -100,7 +140,7 @@ The LDC is used for in-house development, debugging, analysis and planning.
         <span class="divider">/</span>
         <span class="title">Local Development Center</span>
         <span class="divider">/</span>
-        <span class="title_2">No active instance found</span>
+        <span class="title_2">ai-search-mvp-2</span>
     </div>
     <div class="main-bar">
         <!--
@@ -109,6 +149,18 @@ The LDC is used for in-house development, debugging, analysis and planning.
         <span class="warning-icon">&#9888;</span>
         <h2 class="main-title">No development server found</h2>
         <p class="main-paragraph">If you are seeing this message, it may mean that the Pyca Ireland development server has not found your LDC instance yet. If you believe this is a mistake please contact administration.</p>
+        <div class="docs-grid">
+            <a class="doc-card" href="mvp-sprint2.html">
+                <p class="doc-card-label">Analysis</p>
+                <p class="doc-card-title">mvp-sprint2</p>
+                <p class="doc-card-desc">Architecture, components, SSE protocol, design decisions, limitations.</p>
+            </a>
+            <a class="doc-card" href="session03.html">
+                <p class="doc-card-label">Session Report</p>
+                <p class="doc-card-title">Session 03</p>
+                <p class="doc-card-desc">Sprint1 closure through full mvp-sprint2 build. Timeline and issues log.</p>
+            </a>
+        </div>
         <!--
         X01-END
         -->

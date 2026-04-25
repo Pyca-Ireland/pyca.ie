@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!--
+
+Pyca Ireland - "Empowering youth education through innovation"
+
+Pyca Ireland - Local Development Center (version 1)
+Session Report: session03 — ai-search-mvp-2
+Date: 2026-04-25
+
+-->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pyca Ireland | Session 03 Report</title>
+    <link rel="icon" type="image/ico" href="https://github.com/Pyca-Ireland/pyca.ie/raw/refs/heads/main/pyca-ireland-landing/src/app/favicon.ico">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #000;
+            color: #a3a3a3;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            min-height: 100vh;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .top-bar {
+            display: flex;
+            align-items: center;
+            padding: 8px 16px;
+            background-color: #000;
+            border: 1px solid #262626;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .logo {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+            cursor: pointer;
+        }
+
+        .divider {
+            margin: 0 12px;
+            color: #525252;
+            font-size: 18px;
+        }
+
+        .title { font-size: 14px; font-weight: 500; color: #fff; }
+        .title_2 { font-size: 14px; font-weight: 450; color: #fff; opacity: 80%; }
+
+        /* Layout */
+        .layout {
+            display: flex;
+            min-height: calc(100vh - 50px);
+        }
+
+        /* Sidebar TOC */
+        .toc {
+            width: 220px;
+            flex-shrink: 0;
+            border-right: 1px solid #262626;
+            padding: 24px 16px;
+            position: sticky;
+            top: 50px;
+            height: calc(100vh - 50px);
+            overflow-y: auto;
+        }
+
+        .toc-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #525252;
+            margin-bottom: 12px;
+        }
+
+        .toc a {
+            display: block;
+            color: #525252;
+            text-decoration: none;
+            font-size: 13px;
+            padding: 4px 0;
+            border-left: 1px solid #262626;
+            padding-left: 10px;
+            transition: color 0.15s, border-color 0.15s;
+        }
+
+        .toc a:hover { color: #fff; border-left-color: #fff; }
+
+        .toc .toc-sub {
+            padding-left: 20px;
+            font-size: 12px;
+        }
+
+        /* Content */
+        .content {
+            flex: 1;
+            padding: 40px 48px;
+            max-width: 860px;
+        }
+
+        /* Report header */
+        .report-meta {
+            border: 1px solid #262626;
+            padding: 16px 20px;
+            margin-bottom: 40px;
+        }
+
+        .report-meta-grid {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 6px 16px;
+        }
+
+        .meta-key { color: #525252; font-size: 12px; }
+        .meta-val { color: #fff; font-size: 12px; }
+
+        /* Sections */
+        h1 { font-size: 22px; font-weight: 600; color: #fff; margin-bottom: 8px; }
+        h2 { font-size: 16px; font-weight: 600; color: #fff; margin: 36px 0 12px; padding-bottom: 8px; border-bottom: 1px solid #262626; }
+        h3 { font-size: 13px; font-weight: 600; color: #fff; margin: 20px 0 6px; }
+
+        p { margin-bottom: 10px; }
+
+        /* Timeline */
+        .timeline { margin: 16px 0; }
+
+        .timeline-item {
+            display: flex;
+            gap: 16px;
+            padding: 10px 0;
+            border-bottom: 1px solid #1a1a1a;
+        }
+
+        .timeline-item:last-child { border-bottom: none; }
+
+        .t-tag {
+            flex-shrink: 0;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #525252;
+            width: 80px;
+            padding-top: 2px;
+        }
+
+        .t-body { flex: 1; }
+        .t-title { color: #fff; font-size: 13px; font-weight: 500; margin-bottom: 3px; }
+        .t-desc { color: #a3a3a3; font-size: 13px; }
+
+        /* Code blocks */
+        pre {
+            background: #0d0d0d;
+            border: 1px solid #262626;
+            padding: 16px;
+            overflow-x: auto;
+            margin: 12px 0;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        code {
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            color: #e2e8f0;
+        }
+
+        .inline-code {
+            background: #111;
+            border: 1px solid #262626;
+            padding: 1px 5px;
+            font-size: 12px;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            color: #e2e8f0;
+        }
+
+        /* Arch diagram */
+        .arch {
+            border: 1px solid #262626;
+            padding: 20px;
+            margin: 16px 0;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 12px;
+            color: #a3a3a3;
+            line-height: 1.8;
+            white-space: pre;
+            overflow-x: auto;
+        }
+
+        /* Data table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0;
+            font-size: 13px;
+        }
+
+        th {
+            text-align: left;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #525252;
+            padding: 6px 12px;
+            border-bottom: 1px solid #262626;
+        }
+
+        td {
+            padding: 8px 12px;
+            border-bottom: 1px solid #1a1a1a;
+            vertical-align: top;
+        }
+
+        tr:last-child td { border-bottom: none; }
+
+        td:first-child { color: #fff; }
+
+        /* Status chips */
+        .chip {
+            display: inline-block;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            padding: 2px 7px;
+            border: 1px solid #262626;
+            color: #a3a3a3;
+        }
+
+        .chip-done { border-color: #16a34a33; color: #4ade80; }
+        .chip-note { border-color: #92400e33; color: #fbbf24; }
+
+        ul { padding-left: 18px; margin-bottom: 10px; }
+        ul li { margin-bottom: 4px; }
+
+        .section-divider {
+            border: none;
+            border-top: 1px solid #262626;
+            margin: 40px 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="top-bar">
+    <img src="https://raw.githubusercontent.com/Pyca-Ireland/.github/refs/heads/main/presskit/faviconpycasqaure.jpg" alt="Pyca Logo" class="logo" onclick="window.location.href='https://pyca.ie'">
+    <span class="divider">/</span>
+    <span class="title">Local Development Center</span>
+    <span class="divider">/</span>
+    <span class="title_2">session03</span>
+</div>
+
+<div class="layout">
+
+    <!-- TOC -->
+    <nav class="toc">
+        <p class="toc-label">Contents</p>
+        <a href="#meta">Report Info</a>
+        <a href="#overview">Session Overview</a>
+        <a href="#sprint1">MVP-Sprint1 Closure</a>
+        <a href="#sprint2-plan">Sprint2 Planning</a>
+        <a href="#sprint2-build">Sprint2 Build</a>
+        <a class="toc-sub" href="#backend">↳ Backend</a>
+        <a class="toc-sub" href="#frontend">↳ Frontend</a>
+        <a class="toc-sub" href="#streaming">↳ Streaming</a>
+        <a class="toc-sub" href="#sidebar">↳ Sidebar</a>
+        <a class="toc-sub" href="#modal">↳ Modal</a>
+        <a href="#technical">Technical Analysis</a>
+        <a class="toc-sub" href="#rag">↳ RAG Pipeline</a>
+        <a class="toc-sub" href="#sse">↳ SSE Protocol</a>
+        <a class="toc-sub" href="#prompt">↳ Prompt Design</a>
+        <a class="toc-sub" href="#state">↳ State Management</a>
+        <a href="#issues">Issues Encountered</a>
+        <a href="#next">What's Next</a>
+    </nav>
+
+    <!-- Content -->
+    <main class="content">
+
+        <h1>Session 03 — ai-search-mvp-2</h1>
+        <p>Full session report covering all work completed, architectural decisions made, and technical analysis of the MVP-Sprint2 prototype.</p>
+
+        <div id="meta" class="report-meta" style="margin-top:20px">
+            <div class="report-meta-grid">
+                <span class="meta-key">Date</span>         <span class="meta-val">2026-04-25</span>
+                <span class="meta-key">Session</span>      <span class="meta-val">03</span>
+                <span class="meta-key">Sprint</span>       <span class="meta-val">mvp-sprint1 closure → mvp-sprint2 full build</span>
+                <span class="meta-key">Stack</span>        <span class="meta-val">Python (FastAPI, OpenAI, Pinecone) · Next.js 16 · Tailwind CSS 4 · TypeScript</span>
+                <span class="meta-key">Status</span>       <span class="meta-val"><span class="chip chip-done">Prototype Running</span></span>
+                <span class="meta-key">Author</span>       <span class="meta-val">Claude Sonnet 4.6 (via Claude Code)</span>
+            </div>
+        </div>
+
+        <!-- ── OVERVIEW ── -->
+        <h2 id="overview">Session Overview</h2>
+        <p>This session covered two major phases: closing out MVP-Sprint1 by completing the full data pipeline, and designing then building MVP-Sprint2 — a working RAG-powered conversational AI prototype for LCCS exam search.</p>
+
+        <div class="timeline">
+
+            <div class="timeline-item">
+                <div class="t-tag">Sprint 1</div>
+                <div class="t-body">
+                    <div class="t-title">Embedder review</div>
+                    <div class="t-desc">Reviewed existing <span class="inline-code">embedder.py</span> design. Confirmed correctness of SHORT/LONG branching, float-drift fix, and serial API call pattern. Identified serial-call latency as a future scale concern, not a correctness bug.</div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="t-tag">Sprint 1</div>
+                <div class="t-body">
+                    <div class="t-title">Pinecone ingestion — store.py</div>
+                    <div class="t-desc">Built <span class="inline-code">store.py</span> with <span class="inline-code">ingest_questions()</span>. Auto-creates the Pinecone serverless index on first run. Upserts in batches of 100. Uses <span class="inline-code">EXAM_RID</span> as the vector ID for idempotent re-ingestion. Stores all filterable metadata fields.</div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="t-tag">Sprint 1</div>
+                <div class="t-body">
+                    <div class="t-title">Retrieval function — search.py</div>
+                    <div class="t-desc">Built <span class="inline-code">search_questions()</span> returning typed <span class="inline-code">SearchResult</span> dataclasses. Embeds the query with the same <span class="inline-code">text-embedding-3-small</span> model used at ingest time. Supports optional metadata pre-filters: year, level, paper, type.</div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="t-tag">Sprint 1</div>
+                <div class="t-body">
+                    <div class="t-title">Single-turn RAG agent + Flask test server</div>
+                    <div class="t-desc">Built <span class="inline-code">agent.py</span> with a single-turn <span class="inline-code">ask()</span> function. Built <span class="inline-code">server.py</span> (Flask, port 5050) and <span class="inline-code">index.html</span> as a dark test UI. Sprint 1 pipeline declared complete: load → embed → ingest → search → ask.</div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="t-tag">Planning</div>
+                <div class="t-body">
+                    <div class="t-title">MVP-Sprint2 planning session</div>
+                    <div class="t-desc">Entered plan mode. Launched parallel Explore agents to survey pyca UI references (pyca-ireland-landing, pyca-debugcenter) and audit the sprint1 codebase. Asked four key questions: chat style, streaming, image display, code reuse. Decisions: multi-turn chat, streaming SSE, OCR text + local images via FastAPI static, copy science_v3 into sprint2.</div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="t-tag">Sprint 2</div>
+                <div class="t-body">
+                    <div class="t-title">Full backend build</div>
+                    <div class="t-desc">Copied and modified science_v3. Rewrote <span class="inline-code">agent.py</span> as a streaming generator (<span class="inline-code">stream_chat()</span>). Extended <span class="inline-code">SearchResult</span> with <span class="inline-code">pyca_goid</span>. Built FastAPI <span class="inline-code">main.py</span> with three endpoints, CORS, and static image mount.</div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="t-tag">Sprint 2</div>
+                <div class="t-body">
+                    <div class="t-title">Next.js frontend scaffold + full UI build</div>
+                    <div class="t-desc">Scaffolded Next.js 16 + Tailwind 4 + TypeScript. Applied pyca brand tokens from pyca-ireland-landing. Built five components: FilterBar, ChatInput, ChatMessage, SourceCard, QuestionModal. Wired full SSE fetch loop in <span class="inline-code">page.tsx</span>.</div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="t-tag">Sprint 2</div>
+                <div class="t-body">
+                    <div class="t-title">Bug fixes and iterative improvements</div>
+                    <div class="t-desc">Fixed: image 404 (incorrect static mount path), SSE buffering by Next.js rewrites (replaced with Route Handler), cross-origin dev block (allowedDevOrigins), AI hallucinating relevance (system prompt overhaul), greetings triggering "no results" message (removed forced injection). Added auto-sidebar, clickable inline question IDs, and the QuestionModal with image + detail pane.</div>
+                </div>
+            </div>
+
+        </div>
+
+        <hr class="section-divider">
+
+        <!-- ── SPRINT 1 ── -->
+        <h2 id="sprint1">MVP-Sprint1 — Pipeline Closure</h2>
+        <p>Sprint1 established the full offline data pipeline. All modules are in <span class="inline-code">mvp-sprint1/science_v3/</span>.</p>
+
+        <table>
+            <thead><tr><th>Module</th><th>Function</th><th>Status</th></tr></thead>
+            <tbody>
+                <tr><td>models.py</td><td>ExamQuestionObject dataclass — source of truth for all question data</td><td><span class="chip chip-done">Done</span></td></tr>
+                <tr><td>utils.py</td><td>GOID generator, EXAM_RID parser, SHORT/LONG detector, JSON sanitiser</td><td><span class="chip chip-done">Done</span></td></tr>
+                <tr><td>loader.py</td><td>Reads OCR JSON files → ExamQuestionObject list, skips IGNORED pages</td><td><span class="chip chip-done">Done</span></td></tr>
+                <tr><td>embedder.py</td><td>OpenAI text-embedding-3-small, 1536d, SHORT optimisation, per-page vectors</td><td><span class="chip chip-done">Done</span></td></tr>
+                <tr><td>store.py</td><td>Pinecone serverless upsert, EXAM_RID as vector ID, batch 100</td><td><span class="chip chip-done">Done</span></td></tr>
+                <tr><td>search.py</td><td>Query embed → Pinecone query → SearchResult list with metadata filters</td><td><span class="chip chip-done">Done</span></td></tr>
+                <tr><td>agent.py</td><td>Single-turn RAG: search → context → gpt-4o-mini → answer + sources</td><td><span class="chip chip-done">Done</span></td></tr>
+            </tbody>
+        </table>
+
+        <hr class="section-divider">
+
+        <!-- ── SPRINT 2 PLAN ── -->
+        <h2 id="sprint2-plan">MVP-Sprint2 — Planning Decisions</h2>
+
+        <table>
+            <thead><tr><th>Decision</th><th>Chosen</th><th>Reason</th></tr></thead>
+            <tbody>
+                <tr><td>Chat style</td><td>Multi-turn with history</td><td>Enables follow-up queries ("show me a harder one"), more natural for exam study</td></tr>
+                <tr><td>Response delivery</td><td>Server-Sent Events streaming</td><td>Feels alive, matches user expectation from ChatGPT-style tools</td></tr>
+                <tr><td>Image display</td><td>Local FastAPI static + /api/question/ lookup</td><td>IMAGERY_POINTER field is empty; image_pointer in OCR_TEXT_PAGES has local paths</td></tr>
+                <tr><td>Code structure</td><td>Copy science_v3 into sprint2/backend</td><td>Self-contained sprint, free to modify without touching sprint1</td></tr>
+                <tr><td>Backend</td><td>FastAPI + uvicorn</td><td>Native async, clean SSE support via StreamingResponse</td></tr>
+                <tr><td>Frontend</td><td>Next.js 16 + Tailwind 4 + TypeScript</td><td>Matches pyca-ireland-landing stack exactly</td></tr>
+            </tbody>
+        </table>
+
+        <hr class="section-divider">
+
+        <!-- ── SPRINT 2 BUILD ── -->
+        <h2 id="sprint2-build">MVP-Sprint2 — Build</h2>
+
+        <h3 id="backend">Backend — FastAPI</h3>
+        <p>Location: <span class="inline-code">mvp-sprint2/backend/</span></p>
+
+        <div class="arch">mvp-sprint2/backend/
+├── science_v3/
+│   ├── models.py      — unchanged from sprint1
+│   ├── loader.py      — unchanged
+│   ├── embedder.py    — unchanged
+│   ├── store.py       — unchanged
+│   ├── utils.py       — unchanged
+│   ├── search.py      — added pyca_goid to SearchResult
+│   └── agent.py       — full rewrite: stream_chat() generator
+├── main.py            — FastAPI app
+└── requirements.txt</div>
+
+        <p><strong>Endpoints:</strong></p>
+        <table>
+            <thead><tr><th>Method</th><th>Path</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td>POST</td><td>/api/chat</td><td>SSE stream: sources event → token events → done event</td></tr>
+                <tr><td>GET</td><td>/api/question/{exam_rid}</td><td>Full ExamQuestionObject from published_objects_embedded.json, embeddings stripped</td></tr>
+                <tr><td>GET</td><td>/images/output/{path}</td><td>Static files from local output/ directory (question PNG images)</td></tr>
+                <tr><td>GET</td><td>/api/health</td><td>Health check</td></tr>
+            </tbody>
+        </table>
+
+        <h3 id="frontend">Frontend — Next.js</h3>
+        <p>Location: <span class="inline-code">mvp-sprint2/frontend/</span></p>
+
+        <div class="arch">mvp-sprint2/frontend/
+├── app/
+│   ├── layout.tsx         — Inter font, pyca brand CSS vars
+│   ├── globals.css        — #0a0a0a bg, #a1a1a1 text, neutral-800 borders, prose styles
+│   ├── page.tsx           — main chat page, all state, SSE loop, sidebar logic
+│   └── api/chat/
+│       └── route.ts       — Next.js Route Handler proxying SSE to FastAPI
+├── components/
+│   ├── FilterBar.tsx      — collapsible year/level/paper/type filters
+│   ├── ChatInput.tsx      — auto-resize textarea, Enter to send, spinner
+│   ├── ChatMessage.tsx    — markdown render, inline clickable question IDs
+│   ├── SourceCard.tsx     — clickable card → opens QuestionModal
+│   └── QuestionModal.tsx  — full overlay: image left, all details right
+└── next.config.ts         — rewrites for /api/question, /images proxied to :8000</div>
+
+        <h3 id="streaming">Streaming — SSE Implementation</h3>
+        <p>The streaming pipeline has three layers and a known proxy problem that was resolved:</p>
+
+        <div class="arch">Student browser
+    │
+    ├── fetch("/api/chat", { method: "POST" })
+    │       ↓
+    │   Next.js Route Handler  (app/api/chat/route.ts)
+    │   — pipes upstream.body directly, no buffering
+    │   — headers: Cache-Control: no-cache, no-transform
+    │       ↓
+    │   FastAPI StreamingResponse  (main.py)
+    │   — media_type: text/event-stream
+    │   — yields JSON lines from stream_chat() generator
+    │       ↓
+    │   stream_chat() generator  (science_v3/agent.py)
+    │   1. yield {"type": "sources", "data": [...]}
+    │   2. OpenAI stream=True → yield {"type": "token", "data": "..."}  × N
+    │   3. yield {"type": "done"}</div>
+
+        <p><strong>Critical bug resolved:</strong> Next.js <span class="inline-code">rewrites</span> in <span class="inline-code">next.config.ts</span> buffer the entire SSE response before forwarding it, causing the response to appear all at once. Fixed by replacing the rewrite with a Route Handler (<span class="inline-code">app/api/chat/route.ts</span>) that pipes <span class="inline-code">upstream.body</span> directly as a <span class="inline-code">Response</span>.</p>
+
+        <h3 id="sidebar">Auto-Sidebar</h3>
+        <p>The sidebar auto-opens whenever the AI response mentions at least one question ID. It stores the cited sources from the most recent response.</p>
+
+        <pre><code>// After streaming done event:
+const cited = referencedSources(finalContent, pendingSources);
+if (cited.length > 0) {
+    setSidebarSources(cited);
+    setSidebarOpen(true);
+}</code></pre>
+
+        <p>Question IDs are detected by matching the AI response text against <span class="inline-code">/\b(\d{4}-[A-Z]+-[A-Z]+-Q\d+)\b/g</span>. Only questions the AI actually cited are shown — not all retrieved sources. Width: 480px. Closing the sidebar reveals a "Questions (n)" button in the nav to reopen.</p>
+
+        <h3 id="modal">QuestionModal</h3>
+        <p>Triggered by clicking any source card in the sidebar, or by clicking a bold inline question ID in the AI response text. The inline IDs are rendered by preprocessing the AI's markdown before passing to ReactMarkdown:</p>
+
+        <pre><code>// [2023-AB-HL-Q5] → [**2023-AB-HL-Q5**](exam://2023-AB-HL-Q5)
+function preprocessContent(content: string): string {
+    return content.replace(
+        /\[(\d{4}-[A-Z]+-[A-Z]+-Q\d+)\]/g,
+        (_, rid) => `[**${rid}**](exam://${rid})`
+    );
+}
+
+// ReactMarkdown custom 'a' component intercepts exam:// hrefs
+a({ href, children }) {
+    if (href?.startsWith("exam://")) {
+        const rid = href.slice(7);
+        return <button onClick={() => openModal(rid)}>...</button>;
+    }
+}</code></pre>
+
+        <p>The modal layout: image panel (left, flex-1) with page navigation for LONG questions; detail panel (right, w-72) with all ExamQuestionObject fields. Fetches <span class="inline-code">/api/question/{exam_rid}</span> lazily on open. Closes on ✕, Escape, or click outside.</p>
+
+        <hr class="section-divider">
+
+        <!-- ── TECHNICAL ANALYSIS ── -->
+        <h2 id="technical">Technical Analysis — MVP-Sprint2</h2>
+
+        <h3 id="rag">RAG Pipeline Architecture</h3>
+
+        <div class="arch">User query (natural language)
+    │
+    ├── OpenAI text-embedding-3-small
+    │   → 1536-dimensional float vector
+    │
+    ├── Pinecone cosine similarity search
+    │   → top-5 ExamQuestionObject vectors
+    │   → optional pre-filters: year, level, paper, type (metadata)
+    │
+    ├── stream_chat() builds context block:
+    │   "[EXAM_RID] YEAR | PAPER | LEVEL | QN | TYPE | Mm\n{ocr_text}"
+    │   Injected only into the LAST user turn of the history
+    │
+    └── OpenAI gpt-4o-mini (stream=True)
+        System prompt: LCCS assistant rules
+        Messages: [system] + full conversation history with context injected
+        → Streamed token-by-token to browser</div>
+
+        <p><strong>Context injection strategy:</strong> RAG context is injected only into the last user message, not the system prompt. This keeps the system prompt clean and stable across turns, while the retrieved context stays relevant to each individual query. Previous assistant turns in the history have no injected context — only their plain responses.</p>
+
+        <p><strong>Multi-turn history:</strong> The frontend sends the full conversation history with every request. The backend uses the last user message as the Pinecone query, ensuring retrieval is always based on the most recent intent, not the entire conversation.</p>
+
+        <h3 id="sse">SSE Protocol Design</h3>
+        <p>The SSE stream uses three event types delivered as newline-delimited JSON over <span class="inline-code">text/event-stream</span>:</p>
+
+        <table>
+            <thead><tr><th>Event type</th><th>Timing</th><th>Payload</th></tr></thead>
+            <tbody>
+                <tr><td>sources</td><td>First — before any tokens</td><td>Array of source dicts from Pinecone results</td></tr>
+                <tr><td>token</td><td>Repeated — one per OpenAI chunk</td><td>String fragment of the AI response</td></tr>
+                <tr><td>done</td><td>Last — after all tokens</td><td>Empty — signals stream end</td></tr>
+            </tbody>
+        </table>
+
+        <p>Sources are sent first deliberately: the frontend can begin rendering sidebar cards and inline citation links while the text is still streaming in. The <span class="inline-code">done</span> event triggers the source detection pass (regex over the full content) to determine which cited question IDs to show in the sidebar.</p>
+
+        <h3 id="prompt">System Prompt Design &amp; Safeguards</h3>
+        <p>Seven explicit rules govern the AI's behaviour:</p>
+
+        <ol style="padding-left:18px; margin-bottom:10px">
+            <li style="margin-bottom:6px"><strong>Greetings rule</strong> — respond naturally for casual messages; do not mention the database.</li>
+            <li style="margin-bottom:6px"><strong>Genuine relevance rule</strong> — only cite a question by ID if it is genuinely relevant; do not stretch connections.</li>
+            <li style="margin-bottom:6px"><strong>No-results honesty rule</strong> — if asked about a specific topic with no matching questions, say so clearly.</li>
+            <li style="margin-bottom:6px"><strong>No OCR quoting rule</strong> — never reproduce raw OCR text verbatim; paraphrase only.</li>
+            <li style="margin-bottom:6px"><strong>Card auto-display rule</strong> — question card appears automatically on ID citation; do not describe the full question text.</li>
+            <li style="margin-bottom:6px"><strong>Topic scope rule</strong> — LCCS exam content and computer science curriculum only.</li>
+            <li style="margin-bottom:6px"><strong>No marking scheme speculation</strong> — do not guess answers; note marking schemes are coming soon.</li>
+        </ol>
+
+        <p><strong>Known limitation:</strong> Without a score threshold, the Pinecone retrieval always returns 5 results regardless of relevance. The AI may receive weakly relevant context. Rule 2 (genuine relevance) and Rule 3 (no-results honesty) are the primary safeguards against hallucinated connections. A score threshold was prototyped at 0.72 cosine similarity but removed at user request — keeping the AI's judgement as the single filter.</p>
+
+        <h3 id="state">Frontend State Management</h3>
+        <p>All state lives in a single <span class="inline-code">page.tsx</span> client component — no external state library:</p>
+
+        <table>
+            <thead><tr><th>State</th><th>Type</th><th>Purpose</th></tr></thead>
+            <tbody>
+                <tr><td>messages</td><td>Message[]</td><td>Full conversation including streaming placeholder</td></tr>
+                <tr><td>filters</td><td>Filters</td><td>Active metadata filter values</td></tr>
+                <tr><td>filtersOpen</td><td>boolean</td><td>Filter bar visibility</td></tr>
+                <tr><td>streaming</td><td>boolean</td><td>Disables input during active SSE stream</td></tr>
+                <tr><td>sidebarSources</td><td>Source[]</td><td>Cards from last response that cited question IDs</td></tr>
+                <tr><td>sidebarOpen</td><td>boolean</td><td>Sidebar visibility; auto-set true when new cards arrive</td></tr>
+            </tbody>
+        </table>
+
+        <p>The streaming assistant message is added to state immediately as an empty placeholder with <span class="inline-code">streaming: true</span>. Token events append to its <span class="inline-code">content</span> field in-place via <span class="inline-code">setMessages(prev => prev.map(...))</span>. The <span class="inline-code">done</span> event sets <span class="inline-code">streaming: false</span>, which removes the blinking cursor and triggers source detection.</p>
+
+        <hr class="section-divider">
+
+        <!-- ── ISSUES ── -->
+        <h2 id="issues">Issues Encountered &amp; Resolved</h2>
+
+        <table>
+            <thead><tr><th>Issue</th><th>Root Cause</th><th>Fix</th></tr></thead>
+            <tbody>
+                <tr><td>Image 404</td><td>Static mount at <span class="inline-code">/images/</span> pointed to <span class="inline-code">output/</span> dir, but image_pointer already starts with <span class="inline-code">output/</span></td><td>Changed mount to <span class="inline-code">/images/output</span></td></tr>
+                <tr><td>SSE not streaming</td><td>Next.js rewrites buffer the full response before forwarding</td><td>Replaced rewrite with a Route Handler that pipes upstream.body directly</td></tr>
+                <tr><td>Cross-origin dev block</td><td>App accessed via LAN IP (192.168.68.107), Next.js blocked it</td><td>Added allowedDevOrigins to next.config.ts</td></tr>
+                <tr><td>AI hallucinating relevance</td><td>Weak Pinecone results passed as context; AI forced connection</td><td>System prompt rewrite with explicit genuine-relevance and no-OCR-quoting rules</td></tr>
+                <tr><td>"Hi" returned no-results message</td><td>Empty context note was injected even for non-search messages</td><td>Removed forced injection; empty context passes through as plain message</td></tr>
+                <tr><td>uvicorn module not found</td><td>Run from workspace root instead of backend/</td><td>Run from mvp-sprint2/backend/</td></tr>
+                <tr><td>npm/npx not found in bash</td><td>Node.js not on bash PATH, only in C:\Program Files\nodejs</td><td>Used PowerShell with PATH extended and ExecutionPolicy bypassed</td></tr>
+            </tbody>
+        </table>
+
+        <hr class="section-divider">
+
+        <!-- ── NEXT ── -->
+        <h2 id="next">What's Next</h2>
+
+        <ul>
+            <li><strong>Marking schemes</strong> — populate MARKING_POINTER field; surface in modal detail pane as a link.</li>
+            <li><strong>CDN image pointers</strong> — populate IMAGERY_POINTER field; replace local static file serving with cdn.pyca.ie URLs.</li>
+            <li><strong>Topic classification</strong> — the TOPICS field is currently empty on all objects. Auto-tagging via GPT or a manual pass would unlock filter-by-topic search.</li>
+            <li><strong>MARKS field</strong> — currently 0 on all objects. Needs a data pass to populate from marking schemes.</li>
+            <li><strong>Production hardening</strong> — auth, rate limiting, error boundaries, loading states in the modal.</li>
+            <li><strong>Lookup Style 2</strong> — the filter-based question browser (non-AI search bar + topic/year/level grid).</li>
+        </ul>
+
+    </main>
+</div>
+
+</body>
+</html>

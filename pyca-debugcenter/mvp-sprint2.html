@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!--
+
+Pyca Ireland - "Empowering youth education through innovation"
+
+Pyca Ireland - Local Development Center (version 1)
+Technical Analysis: mvp-sprint2 — LCCS AI Search RAG Chat Prototype
+Date: 2026-04-26
+
+-->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pyca Ireland | MVP-Sprint2 Analysis</title>
+    <link rel="icon" type="image/ico" href="https://github.com/Pyca-Ireland/pyca.ie/raw/refs/heads/main/pyca-ireland-landing/src/app/favicon.ico">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #000;
+            color: #a3a3a3;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            min-height: 100vh;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .top-bar {
+            display: flex;
+            align-items: center;
+            padding: 8px 16px;
+            background-color: #000;
+            border: 1px solid #262626;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .logo {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+            cursor: pointer;
+        }
+
+        .divider {
+            margin: 0 12px;
+            color: #525252;
+            font-size: 18px;
+        }
+
+        .title { font-size: 14px; font-weight: 500; color: #fff; }
+        .title_2 { font-size: 14px; font-weight: 450; color: #fff; opacity: 80%; }
+
+        .layout {
+            display: flex;
+            min-height: calc(100vh - 50px);
+        }
+
+        .toc {
+            width: 220px;
+            flex-shrink: 0;
+            border-right: 1px solid #262626;
+            padding: 24px 16px;
+            position: sticky;
+            top: 50px;
+            height: calc(100vh - 50px);
+            overflow-y: auto;
+        }
+
+        .toc-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #525252;
+            margin-bottom: 12px;
+        }
+
+        .toc a {
+            display: block;
+            color: #525252;
+            text-decoration: none;
+            font-size: 13px;
+            padding: 4px 0;
+            border-left: 1px solid #262626;
+            padding-left: 10px;
+            transition: color 0.15s, border-color 0.15s;
+        }
+
+        .toc a:hover { color: #fff; border-left-color: #fff; }
+
+        .toc .toc-sub {
+            padding-left: 20px;
+            font-size: 12px;
+        }
+
+        .content {
+            flex: 1;
+            padding: 40px 48px;
+            max-width: 900px;
+        }
+
+        .report-meta {
+            border: 1px solid #262626;
+            padding: 16px 20px;
+            margin-bottom: 40px;
+        }
+
+        .report-meta-grid {
+            display: grid;
+            grid-template-columns: 130px 1fr;
+            gap: 6px 16px;
+        }
+
+        .meta-key { color: #525252; font-size: 12px; }
+        .meta-val { color: #fff; font-size: 12px; }
+
+        h1 { font-size: 22px; font-weight: 600; color: #fff; margin-bottom: 8px; }
+        h2 { font-size: 16px; font-weight: 600; color: #fff; margin: 36px 0 12px; padding-bottom: 8px; border-bottom: 1px solid #262626; }
+        h3 { font-size: 13px; font-weight: 600; color: #fff; margin: 20px 0 6px; }
+
+        p { margin-bottom: 10px; }
+        strong { color: #fff; }
+
+        pre {
+            background: #0d0d0d;
+            border: 1px solid #262626;
+            padding: 16px;
+            overflow-x: auto;
+            margin: 12px 0;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        code {
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            color: #e2e8f0;
+        }
+
+        .inline-code {
+            background: #111;
+            border: 1px solid #262626;
+            padding: 1px 5px;
+            font-size: 12px;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            color: #e2e8f0;
+        }
+
+        .arch {
+            border: 1px solid #262626;
+            padding: 20px;
+            margin: 16px 0;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 12px;
+            color: #a3a3a3;
+            line-height: 1.8;
+            white-space: pre;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0;
+            font-size: 13px;
+        }
+
+        th {
+            text-align: left;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #525252;
+            padding: 6px 12px;
+            border-bottom: 1px solid #262626;
+        }
+
+        td {
+            padding: 8px 12px;
+            border-bottom: 1px solid #1a1a1a;
+            vertical-align: top;
+        }
+
+        tr:last-child td { border-bottom: none; }
+        td:first-child { color: #fff; }
+
+        .chip {
+            display: inline-block;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            padding: 2px 7px;
+            border: 1px solid #262626;
+            color: #a3a3a3;
+        }
+
+        .chip-done { border-color: #16a34a33; color: #4ade80; }
+        .chip-warn { border-color: #92400e33; color: #fbbf24; }
+        .chip-info { border-color: #1e3a5f; color: #60a5fa; }
+
+        ul { padding-left: 18px; margin-bottom: 10px; }
+        ul li { margin-bottom: 4px; }
+        ol { padding-left: 18px; margin-bottom: 10px; }
+        ol li { margin-bottom: 6px; }
+
+        .callout {
+            border: 1px solid #262626;
+            border-left: 3px solid #525252;
+            padding: 12px 16px;
+            margin: 16px 0;
+            font-size: 13px;
+        }
+
+        .callout-warn { border-left-color: #fbbf24; }
+        .callout-info { border-left-color: #60a5fa; }
+
+        .section-divider {
+            border: none;
+            border-top: 1px solid #262626;
+            margin: 40px 0;
+        }
+
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 12px 0;
+        }
+
+        .box {
+            border: 1px solid #262626;
+            padding: 16px;
+        }
+
+        .box-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #525252;
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="top-bar">
+    <img src="https://raw.githubusercontent.com/Pyca-Ireland/.github/refs/heads/main/presskit/faviconpycasqaure.jpg" alt="Pyca Logo" class="logo" onclick="window.location.href='https://pyca.ie'">
+    <span class="divider">/</span>
+    <span class="title">Local Development Center</span>
+    <span class="divider">/</span>
+    <span class="title_2">mvp-sprint2</span>
+</div>
+
+<div class="layout">
+
+    <nav class="toc">
+        <p class="toc-label">Contents</p>
+        <a href="#meta">Project Info</a>
+        <a href="#overview">System Overview</a>
+        <a href="#data-model">Data Model</a>
+        <a href="#backend">Backend</a>
+        <a class="toc-sub" href="#search">↳ search.py</a>
+        <a class="toc-sub" href="#agent">↳ agent.py</a>
+        <a class="toc-sub" href="#mainpy">↳ main.py</a>
+        <a class="toc-sub" href="#sse-protocol">↳ SSE Protocol</a>
+        <a href="#frontend">Frontend</a>
+        <a class="toc-sub" href="#state">↳ State Model</a>
+        <a class="toc-sub" href="#sse-client">↳ SSE Client Loop</a>
+        <a class="toc-sub" href="#components">↳ Components</a>
+        <a class="toc-sub" href="#inline-ids">↳ Inline Question IDs</a>
+        <a class="toc-sub" href="#modal">↳ QuestionModal</a>
+        <a href="#decisions">Design Decisions</a>
+        <a class="toc-sub" href="#route-handler">↳ Streaming Fix</a>
+        <a class="toc-sub" href="#threshold">↳ No Score Threshold</a>
+        <a class="toc-sub" href="#context-injection">↳ Context Injection</a>
+        <a href="#prompt">System Prompt</a>
+        <a href="#limitations">Limitations</a>
+        <a href="#next">What's Next</a>
+    </nav>
+
+    <main class="content">
+
+        <h1>MVP-Sprint2 — Technical Analysis</h1>
+        <p>Architecture and implementation reference for the LCCS AI Search RAG chat prototype.</p>
+
+        <div id="meta" class="report-meta" style="margin-top:20px">
+            <div class="report-meta-grid">
+                <span class="meta-key">Project</span>      <span class="meta-val">ai-search-mvp-2</span>
+                <span class="meta-key">Date</span>         <span class="meta-val">2026-04-26</span>
+                <span class="meta-key">Backend</span>      <span class="meta-val">Python 3.14 · FastAPI · OpenAI SDK · Pinecone SDK</span>
+                <span class="meta-key">Frontend</span>     <span class="meta-val">Next.js 16 · Tailwind CSS 4 · TypeScript · React 19</span>
+                <span class="meta-key">AI Models</span>    <span class="meta-val">text-embedding-3-small (1536d) · gpt-4o-mini</span>
+                <span class="meta-key">Vector DB</span>    <span class="meta-val">Pinecone serverless · index: exam-questions · cosine similarity</span>
+                <span class="meta-key">Status</span>       <span class="meta-val"><span class="chip chip-done">Prototype Running</span></span>
+            </div>
+        </div>
+
+        <!-- ── OVERVIEW ── -->
+        <h2 id="overview">System Overview</h2>
+        <p>MVP-Sprint2 is a multi-turn conversational AI interface over a vector-indexed database of LCCS (Leaving Certificate Computer Science) past exam questions. Students ask free-text questions; the system retrieves semantically similar exam questions from Pinecone, injects them as context into an OpenAI chat prompt, and streams the response back token-by-token. Retrieved questions surface as clickable cards in a sidebar and as bold inline links within the AI response text.</p>
+
+        <div class="arch">User types: "Show me a recursion question from HL"
+      │
+      ▼
+ [Frontend: page.tsx]
+ POST /api/chat  → { messages, top_k: 5, filters: { level: "HL" } }
+      │
+      ▼
+ [Next.js Route Handler: app/api/chat/route.ts]
+ Transparent SSE pipe → FastAPI :8000
+      │
+      ▼
+ [FastAPI: main.py → stream_chat()]
+ 1. Embed last user message  (OpenAI text-embedding-3-small)
+ 2. Query Pinecone            (top-5, filter: level=HL)
+ 3. Yield sources event       → frontend renders sidebar cards
+ 4. Build context block       → injected into last user turn
+ 5. OpenAI gpt-4o-mini stream → yield token events
+ 6. Yield done event          → frontend detects cited IDs, opens sidebar
+      │
+      ▼
+ [Frontend]
+ AI response renders as markdown
+ [2023-AB-HL-Q5] → bold clickable button → opens QuestionModal</div>
+
+        <hr class="section-divider">
+
+        <!-- ── DATA MODEL ── -->
+        <h2 id="data-model">Data Model</h2>
+        <p>All data originates from <span class="inline-code">published_objects_embedded.json</span> — a list of <span class="inline-code">ExamQuestionObject</span> instances produced by the Sprint1 pipeline.</p>
+
+        <table>
+            <thead><tr><th>Field</th><th>Type</th><th>Source</th><th>Notes</th></tr></thead>
+            <tbody>
+                <tr><td>EXAM_RID</td><td>string</td><td>utils.py parser</td><td>e.g. 2023-AB-HL-Q5. Used as Pinecone vector ID.</td></tr>
+                <tr><td>PYCA_GOID</td><td>string</td><td>utils.py GOID generator</td><td>Internal unique identifier (UUID-like).</td></tr>
+                <tr><td>YEAR</td><td>int</td><td>filename</td><td>Pinecone metadata filter field.</td></tr>
+                <tr><td>PAPER</td><td>string</td><td>filename (AB / CD)</td><td>Pinecone metadata filter field.</td></tr>
+                <tr><td>LEVEL</td><td>string</td><td>filename (HL / OL)</td><td>Pinecone metadata filter field.</td></tr>
+                <tr><td>NUMBER</td><td>int</td><td>JSON object key</td><td>Question number within the paper.</td></tr>
+                <tr><td>TYPE</td><td>string</td><td>page count heuristic</td><td>SHORT (&lt;3 pages) or LONG (≥3 pages). Pinecone filter field.</td></tr>
+                <tr><td>MARKS</td><td>int</td><td>OCR / marking scheme</td><td>Currently 0 on all objects — not yet populated.</td></tr>
+                <tr><td>PAGE_COUNT</td><td>int</td><td>OCR_TEXT_PAGES length</td><td>Number of image pages for this question.</td></tr>
+                <tr><td>TOPICS</td><td>list[str]</td><td>—</td><td>Currently empty on all objects — no classifier yet.</td></tr>
+                <tr><td>OCR_TEXT</td><td>string</td><td>OCR pipeline</td><td>Full concatenated text. Stored in Pinecone metadata. Used as RAG context.</td></tr>
+                <tr><td>OCR_TEXT_PAGES</td><td>list[dict]</td><td>OCR pipeline</td><td>Per-page objects with <span class="inline-code">page</span>, <span class="inline-code">image_pointer</span>, <span class="inline-code">text</span>. NOT stored in Pinecone — fetched via <span class="inline-code">/api/question/</span>.</td></tr>
+                <tr><td>IMAGERY_POINTER</td><td>string</td><td>CDN</td><td>Currently empty. Future: cdn.pyca.ie URL.</td></tr>
+                <tr><td>MARKING_POINTER</td><td>string</td><td>CDN</td><td>Currently empty. Future: marking scheme URL.</td></tr>
+                <tr><td>STATUS</td><td>string</td><td>pipeline</td><td>e.g. PUBLISHED.</td></tr>
+                <tr><td>QA_STATUS</td><td>string</td><td>QA pass</td><td>e.g. PASS3.</td></tr>
+                <tr><td>EMBEDDING</td><td>list[float]</td><td>embedder.py</td><td>1536-dimensional vector. Stripped before serving to frontend.</td></tr>
+            </tbody>
+        </table>
+
+        <div class="callout callout-warn">
+            <strong>OCR_TEXT_PAGES is not in Pinecone metadata.</strong> Pinecone stores only scalar metadata fields. Page-level image pointers require a separate GET /api/question/{exam_rid} lookup from the source JSON file.
+        </div>
+
+        <hr class="section-divider">
+
+        <!-- ── BACKEND ── -->
+        <h2 id="backend">Backend</h2>
+        <p>Location: <span class="inline-code">mvp-sprint2/backend/</span></p>
+
+        <div class="arch">science_v3/
+├── models.py     — ExamQuestionObject dataclass (source of truth)
+├── utils.py      — GOID generator, EXAM_RID parser, SHORT/LONG detector
+├── loader.py     — reads OCR JSON → ExamQuestionObject list
+├── embedder.py   — OpenAI text-embedding-3-small, 1536d
+├── store.py      — Pinecone upsert, EXAM_RID as vector ID, batch 100
+├── search.py     — query embed → Pinecone → SearchResult list
+└── agent.py      — stream_chat() SSE generator
+
+main.py           — FastAPI: 3 endpoints + CORS + static image mount</div>
+
+        <!-- search.py -->
+        <h3 id="search">science_v3/search.py — SearchResult + search_questions()</h3>
+
+        <p><span class="inline-code">SearchResult</span> is a flat dataclass mirroring the Pinecone metadata fields plus <span class="inline-code">score</span>. It was extended in sprint2 to include <span class="inline-code">pyca_goid</span>.</p>
+
+        <pre><code>@dataclass
+class SearchResult:
+    score: float
+    exam_rid: str
+    pyca_goid: str        # Added in sprint2
+    year: int
+    paper: str
+    level: str
+    number: int
+    type: str
+    marks: int
+    page_count: int
+    topics: list
+    ocr_text: str         # Full OCR text — used for RAG context block
+    imagery_pointer: str
+    marking_pointer: str
+    status: str
+    qa_status: str</code></pre>
+
+        <p><strong>search_questions() flow:</strong></p>
+        <ol>
+            <li>Embeds the query string using <span class="inline-code">text-embedding-3-small</span> (same model used at ingest time — dimension parity is critical for cosine similarity to work).</li>
+            <li>Builds a Pinecone metadata filter dict from any provided year/level/paper/type arguments. Empty dict = no filter.</li>
+            <li>Calls <span class="inline-code">index.query(vector, top_k, include_metadata=True, filter)</span>.</li>
+            <li>Maps each <span class="inline-code">match</span> to a <span class="inline-code">SearchResult</span>, safely casting types (metadata values come back as mixed types from Pinecone).</li>
+        </ol>
+
+        <div class="callout callout-info">
+            Metadata filters are applied as Pinecone pre-filters (before vector similarity scoring). This means top_k is drawn from only the matching subset — if very few documents match a filter, results may be sparse or empty.
+        </div>
+
+        <!-- agent.py -->
+        <h3 id="agent">science_v3/agent.py — stream_chat() generator</h3>
+
+        <p><span class="inline-code">stream_chat()</span> is a Python generator that yields dicts in SSE order. It is the central orchestration function.</p>
+
+        <pre><code>def stream_chat(
+    messages: list[dict],       # Full conversation history [{role, content}, ...]
+    top_k: int = 5,
+    filters: dict | None = None,
+    openai_api_key: str | None = None,
+    pinecone_api_key: str | None = None,
+    chat_model: str = "gpt-4o-mini",
+) -> Generator[dict, None, None]:</code></pre>
+
+        <p><strong>Execution order:</strong></p>
+        <ol>
+            <li>Extract the last user message from the history — this is the RAG query.</li>
+            <li>Call <span class="inline-code">search_questions()</span> with the query and filters.</li>
+            <li>Yield <span class="inline-code">{"type": "sources", "data": [...]}</span> — serialised SearchResults, with <span class="inline-code">ocr_text</span> truncated to 300 chars for the preview field.</li>
+            <li>Build the context block: one section per result, formatted as <span class="inline-code">[EXAM_RID] YEAR | PAPER | LEVEL | Qn | TYPE | Nm\n{ocr_text}</span>.</li>
+            <li>Assemble the OpenAI message list: <span class="inline-code">[system] + history</span>. Context block is injected only into the last user turn — earlier turns pass through unchanged.</li>
+            <li>Call <span class="inline-code">client.chat.completions.create(model, messages, stream=True)</span>.</li>
+            <li>For each chunk: yield <span class="inline-code">{"type": "token", "data": delta}</span>.</li>
+            <li>Yield <span class="inline-code">{"type": "done"}</span>.</li>
+        </ol>
+
+        <p><strong>_to_dict() serialisation:</strong> Converts SearchResult to a plain dict for JSON. Truncates <span class="inline-code">ocr_text</span> to 300 chars as <span class="inline-code">ocr_text_preview</span> — the full text is only sent to the LLM, not to the browser.</p>
+
+        <!-- main.py -->
+        <h3 id="mainpy">main.py — FastAPI App</h3>
+
+        <table>
+            <thead><tr><th>Method</th><th>Path</th><th>Handler</th></tr></thead>
+            <tbody>
+                <tr><td>POST</td><td>/api/chat</td><td>StreamingResponse wrapping event_stream() generator. Each event: <span class="inline-code">data: {json}\n\n</span></td></tr>
+                <tr><td>GET</td><td>/api/question/{exam_rid}</td><td>Lazy-loaded cache from published_objects_embedded.json. Strips EMBEDDING and page embeddings before returning.</td></tr>
+                <tr><td>GET</td><td>/api/health</td><td>Returns <span class="inline-code">{"status": "ok"}</span></td></tr>
+                <tr><td>GET</td><td>/images/output/{path}</td><td>StaticFiles mount pointing to local output/ directory. Only mounted if the directory exists.</td></tr>
+            </tbody>
+        </table>
+
+        <p><strong>Question cache:</strong> <span class="inline-code">_question_cache</span> is a module-level dict populated lazily on first <span class="inline-code">/api/question/</span> request. Subsequent requests are O(1) dict lookup. Embeddings are stripped during the load pass (not at serve time) — the cache holds embedding-free objects.</p>
+
+        <p><strong>CORS:</strong> <span class="inline-code">allow_origins=["http://localhost:3000"]</span>. Development only. In production this would need the real pyca.ie domain.</p>
+
+        <!-- SSE protocol -->
+        <h3 id="sse-protocol">SSE Event Protocol</h3>
+
+        <table>
+            <thead><tr><th>Event</th><th>Timing</th><th>Shape</th><th>Frontend action</th></tr></thead>
+            <tbody>
+                <tr><td>sources</td><td>First — before any tokens</td><td><span class="inline-code">{"type":"sources","data":[{exam_rid, pyca_goid, score, year, paper, level, number, type, marks, page_count, topics, ocr_text_preview, imagery_pointer, marking_pointer, status, qa_status}]}</span></td><td>Attaches sources array to assistant message; sidebar can render cards immediately.</td></tr>
+                <tr><td>token</td><td>Repeated — one per OpenAI stream chunk</td><td><span class="inline-code">{"type":"token","data":"Hello"}</span></td><td>Appends to assistant message content in state.</td></tr>
+                <tr><td>done</td><td>Last</td><td><span class="inline-code">{"type":"done"}</span></td><td>Sets streaming: false, removes cursor, runs citation detection, auto-opens sidebar.</td></tr>
+            </tbody>
+        </table>
+
+        <p>Wire format per event: <span class="inline-code">data: {json}\n\n</span> — standard SSE format. The frontend parses by splitting on <span class="inline-code">\n</span> and checking for the <span class="inline-code">data: </span> prefix.</p>
+
+        <hr class="section-divider">
+
+        <!-- ── FRONTEND ── -->
+        <h2 id="frontend">Frontend</h2>
+        <p>Location: <span class="inline-code">mvp-sprint2/frontend/</span></p>
+
+        <div class="arch">app/
+├── layout.tsx              — Inter font import, html/body shell
+├── globals.css             — pyca brand tokens, prose styles, scrollbar hiding
+├── page.tsx                — single client component, all state + SSE loop
+└── api/chat/
+    └── route.ts            — Next.js Route Handler: streaming SSE proxy
+
+components/
+├── FilterBar.tsx           — collapsible year/level/paper/type filter row
+├── ChatInput.tsx           — auto-resize textarea, Enter sends, spinner
+├── ChatMessage.tsx         — markdown render + inline clickable question IDs
+├── SourceCard.tsx          — compact card → opens QuestionModal on click
+└── QuestionModal.tsx       — full overlay: image left + all metadata right</div>
+
+        <!-- State model -->
+        <h3 id="state">State Model (page.tsx)</h3>
+        <p>All application state lives in a single client component. No external state library.</p>
+
+        <table>
+            <thead><tr><th>State</th><th>Type</th><th>Initial</th><th>Purpose</th></tr></thead>
+            <tbody>
+                <tr><td>messages</td><td>Message[]</td><td>[]</td><td>Full conversation. Each entry has id, role, content, sources[], streaming flag.</td></tr>
+                <tr><td>filters</td><td>Filters</td><td>{year:"",level:"",paper:"",type:""}</td><td>Active filter values from FilterBar. Sent with every chat request.</td></tr>
+                <tr><td>filtersOpen</td><td>boolean</td><td>false</td><td>Controls FilterBar visibility. Toggle in nav.</td></tr>
+                <tr><td>streaming</td><td>boolean</td><td>false</td><td>True during active SSE fetch. Disables ChatInput.</td></tr>
+                <tr><td>sidebarSources</td><td>Source[]</td><td>[]</td><td>Cards from the most recent response that cited question IDs. Persists after sidebar is closed.</td></tr>
+                <tr><td>sidebarOpen</td><td>boolean</td><td>false</td><td>Sidebar visibility. Auto-set true when new cited sources arrive. "Questions (n)" nav button reopens.</td></tr>
+            </tbody>
+        </table>
+
+        <p><strong>Message shape:</strong></p>
+        <pre><code>interface Message {
+  id: string;           // uid() auto-increment
+  role: "user" | "assistant";
+  content: string;      // appended token-by-token during streaming
+  sources?: Source[];   // attached on sources event
+  streaming?: boolean;  // drives blinking cursor display
+}</code></pre>
+
+        <!-- SSE client loop -->
+        <h3 id="sse-client">SSE Client Loop (page.tsx handleSend)</h3>
+
+        <pre><code>async function handleSend(text: string) {
+  // 1. Push user + empty assistant placeholder immediately
+  const aId = uid();
+  setMessages(prev => [...prev, userMsg, { id: aId, role: "assistant",
+    content: "", sources: [], streaming: true }]);
+
+  // 2. POST full conversation history
+  const res = await fetch("/api/chat", { method: "POST", body: ... });
+  const reader = res.body.getReader();
+  let buf = "";
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buf += decoder.decode(value, { stream: true });
+    const lines = buf.split("\n");
+    buf = lines.pop() ?? "";   // Keep incomplete line in buffer
+
+    for (const line of lines) {
+      if (!line.startsWith("data: ")) continue;
+      const event = JSON.parse(line.slice(6));
+
+      if (event.type === "sources") {
+        // Attach sources to the placeholder message
+        setMessages(prev => prev.map(m => m.id === aId
+          ? { ...m, sources: event.data } : m));
+      } else if (event.type === "token") {
+        // Append token to content (functional update avoids stale closure)
+        setMessages(prev => prev.map(m => m.id === aId
+          ? { ...m, content: m.content + event.data } : m));
+      } else if (event.type === "done") {
+        setMessages(prev => prev.map(m => m.id === aId
+          ? { ...m, streaming: false } : m));
+        // Auto-sidebar: only cited sources
+        const cited = referencedSources(finalContent, pendingSources);
+        if (cited.length > 0) { setSidebarSources(cited); setSidebarOpen(true); }
+      }
+    }
+  }
+}</code></pre>
+
+        <div class="callout callout-info">
+            <strong>Why not EventSource?</strong> The browser's native EventSource API only supports GET requests. Since the chat endpoint requires POST (conversation history + filters in the body), SSE is consumed manually via the Fetch API and a ReadableStream reader.
+        </div>
+
+        <!-- Components -->
+        <h3 id="components">Components</h3>
+
+        <div class="two-col">
+            <div class="box">
+                <p class="box-label">FilterBar.tsx</p>
+                <p>Collapsible row: Year (text input), Level (select: HL/OL), Paper (select: AB/CD), Type (select: SHORT/LONG). Renders below the nav when <span class="inline-code">visible</span> is true. Calls <span class="inline-code">onChange</span> with a new Filters object on every field change. Filters are serialised to null (not empty string) before being sent to the backend.</p>
+            </div>
+            <div class="box">
+                <p class="box-label">ChatInput.tsx</p>
+                <p>Auto-resize textarea using <span class="inline-code">onInput</span> to set <span class="inline-code">style.height</span>. Enter submits (unless Shift+Enter — newline). Disabled while <span class="inline-code">streaming</span> is true. Shows a small spinner in the send button during streaming.</p>
+            </div>
+            <div class="box">
+                <p class="box-label">SourceCard.tsx</p>
+                <p>Displays <span class="inline-code">exam_rid</span> (white, semibold) and <span class="inline-code">humanLabel()</span> (grey, two-line stack) with the cosine similarity score in mono text. Full card is clickable — opens QuestionModal via local <span class="inline-code">modalOpen</span> state.</p>
+            </div>
+            <div class="box">
+                <p class="box-label">ChatMessage.tsx</p>
+                <p>User messages: right-aligned plain text. Assistant messages: ReactMarkdown render with custom <span class="inline-code">a</span> component. Streaming cursor: <span class="inline-code">w-1 h-3.5 bg-[#a1a1a1] animate-pulse</span> span. Manages its own modal state for inline ID clicks.</p>
+            </div>
+        </div>
+
+        <!-- Inline IDs -->
+        <h3 id="inline-ids">Inline Clickable Question IDs (ChatMessage.tsx)</h3>
+        <p>The AI writes question references as <span class="inline-code">[2023-AB-HL-Q5]</span> in its markdown. These need to be rendered as bold, clickable buttons that open the QuestionModal. ReactMarkdown cannot natively handle this — the workaround uses a two-step process:</p>
+
+        <p><strong>Step 1 — preprocessContent():</strong> Before passing markdown to ReactMarkdown, transform all <span class="inline-code">[EXAM_RID]</span> tokens into markdown links using a custom <span class="inline-code">exam://</span> protocol:</p>
+
+        <pre><code>function preprocessContent(content: string): string {
+  return content.replace(
+    /\[(\d{4}-[A-Z]+-[A-Z]+-Q\d+)\]/g,
+    (_, rid) => `[**${rid}**](exam://${rid})`
+  );
+}
+// [2023-AB-HL-Q5] → [**2023-AB-HL-Q5**](exam://2023-AB-HL-Q5)</code></pre>
+
+        <p><strong>Step 2 — custom a component:</strong> ReactMarkdown's <span class="inline-code">a</span> component intercepts any link whose href starts with <span class="inline-code">exam://</span> and renders a bold white button instead:</p>
+
+        <pre><code>a({ href, children }) {
+  if (href?.startsWith("exam://")) {
+    const rid = href.slice(7);
+    return (
+      &lt;button onClick={() => openModal(rid)}
+        className="font-bold text-white hover:underline cursor-pointer"&gt;
+        [{rid}]
+      &lt;/button&gt;
+    );
+  }
+  return &lt;a href={href} target="_blank" rel="noopener noreferrer"&gt;{children}&lt;/a&gt;;
+}</code></pre>
+
+        <p><span class="inline-code">openModal(rid)</span> looks up the source object in <span class="inline-code">m.sources</span> by <span class="inline-code">exam_rid</span> and sets it as <span class="inline-code">modalSource</span>. If the AI cited an ID that is not in the sources array (e.g. hallucinated ID), the button does nothing.</p>
+
+        <!-- QuestionModal -->
+        <h3 id="modal">QuestionModal.tsx</h3>
+        <p>Triggered from both SourceCard (sidebar) and ChatMessage (inline IDs). Full-screen overlay at <span class="inline-code">z-50</span>.</p>
+
+        <pre><code>// Fetches OCR_TEXT_PAGES on mount (needed for image_pointer per page)
+useEffect(() => {
+  fetch(`/api/question/${s.exam_rid}`)
+    .then(r => r.ok ? r.json() : null)
+    .then(data => { if (data) setPages(data.OCR_TEXT_PAGES ?? []); })
+    .finally(() => setLoading(false));
+}, [s.exam_rid]);</code></pre>
+
+        <p><strong>Layout:</strong> The modal is a flex row. Left panel (<span class="inline-code">flex-1</span>) shows the question image from <span class="inline-code">/images/{activePage.image_pointer}</span> with prev/next page navigation for multi-page questions. Right panel (<span class="inline-code">w-72</span>, scrollable) shows all ExamQuestionObject fields as key-value rows.</p>
+
+        <p><strong>Close:</strong> ✕ button, Escape keydown listener (added/removed via useEffect), or click on the dark backdrop.</p>
+
+        <hr class="section-divider">
+
+        <!-- ── DESIGN DECISIONS ── -->
+        <h2 id="decisions">Design Decisions</h2>
+
+        <h3 id="route-handler">Streaming Fix — Route Handler over Rewrite</h3>
+        <p>The first streaming implementation used a Next.js <span class="inline-code">rewrites</span> rule in <span class="inline-code">next.config.ts</span> to proxy <span class="inline-code">/api/chat</span> → <span class="inline-code">http://localhost:8000/api/chat</span>. This caused SSE to arrive all at once in the browser — the response was accumulated by the Next.js dev server before being forwarded.</p>
+
+        <p>The fix: replace the rewrite with a <span class="inline-code">app/api/chat/route.ts</span> Next.js Route Handler that pipes the upstream body directly:</p>
+
+        <pre><code>// app/api/chat/route.ts
+export const dynamic = "force-dynamic";
+
+export async function POST(req: NextRequest) {
+  const upstream = await fetch("http://localhost:8000/api/chat", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: await req.text(),
+  });
+  return new Response(upstream.body, {
+    headers: {
+      "Content-Type": "text/event-stream",
+      "Cache-Control": "no-cache, no-transform",
+      "X-Accel-Buffering": "no",
+    },
+  });
+}</code></pre>
+
+        <p>The rewrites for non-streaming endpoints (<span class="inline-code">/api/question/</span>, <span class="inline-code">/images/</span>, <span class="inline-code">/api/health</span>) remain in <span class="inline-code">next.config.ts</span> — they are fine for request/response workloads.</p>
+
+        <h3 id="threshold">No Score Threshold — AI Judgement as Single Filter</h3>
+        <p>A <span class="inline-code">_MIN_SCORE = 0.72</span> cosine similarity threshold was prototyped — results below the threshold would be dropped before being passed to the LLM. This was removed at user request.</p>
+
+        <p><strong>Current approach:</strong> All top_k results are always passed to the LLM. System prompt Rule 2 (<em>"only cite a question if it is GENUINELY relevant"</em>) and Rule 3 (<em>"if none are a genuine match, say so honestly"</em>) are the only safeguards against the AI forcing a connection to weakly relevant questions.</p>
+
+        <div class="callout callout-warn">
+            <strong>Known limitation.</strong> Without a threshold, the LLM always receives 5 results. For highly specific or niche queries with no matching questions, the LLM receives contextually irrelevant data. The system prompt rules reduce hallucination but do not eliminate it.
+        </div>
+
+        <h3 id="context-injection">Context Injection — Last Turn Only</h3>
+        <p>RAG context is injected only into the last user message, not into the system prompt and not into prior conversation turns:</p>
+
+        <pre><code>for i, msg in enumerate(messages):
+    if msg["role"] == "user" and i == len(messages) - 1:
+        if context_block:
+            content = (
+                f"Relevant exam questions from the database:\n\n{context_block}"
+                f"\n\nStudent query: {msg['content']}"
+            )
+        else:
+            content = msg["content"]
+    else:
+        content = msg["content"]   # All other turns: unchanged</code></pre>
+
+        <p><strong>Why:</strong> Each message to the backend triggers a fresh Pinecone search using the latest user query. Re-injecting context from previous turns would pollute the history with stale retrieval results and waste context tokens. The system prompt stays clean and constant across all turns.</p>
+
+        <hr class="section-divider">
+
+        <!-- ── SYSTEM PROMPT ── -->
+        <h2 id="prompt">System Prompt — Full Text &amp; Rules</h2>
+
+        <pre><code>"You are a helpful LCCS (Leaving Certificate Computer Science) exam assistant for pyca.ie.
+You help students find and understand past exam questions.
+You will be given a list of exam questions retrieved from a semantic search database as context.
+RULES:
+1. For greetings or general conversation, respond naturally and warmly.
+   You do not need to mention the database for casual messages.
+2. Only cite a question by its ID (e.g. 2023-AB-HL-Q7) if it is GENUINELY relevant
+   to the student's query. Do not stretch or invent a connection — if a retrieved
+   question covers a different topic, do not cite it.
+3. If the student asks about a specific topic or question and none of the retrieved
+   questions are a genuine match, say honestly that no relevant questions for that
+   topic are currently in the database.
+4. Never quote or reproduce raw OCR text verbatim. Paraphrase in your own words.
+5. The question image card appears automatically when you cite an ID — do not
+   describe the question text in full.
+6. Stay on topic: LCCS exam content and the computer science curriculum only.
+7. Do not speculate about marking scheme answers."</code></pre>
+
+        <table>
+            <thead><tr><th>Rule</th><th>Motivation</th></tr></thead>
+            <tbody>
+                <tr><td>1 — Greetings</td><td>Without this, saying "Hi" triggered "no matching questions found" messages because the context block was empty and the AI interpreted that as a failed search.</td></tr>
+                <tr><td>2 — Genuine relevance</td><td>Pinecone returns top-5 regardless of relevance. Without this rule, the AI would cite an electric car charging question as "related to recursion" because both involve computer science.</td></tr>
+                <tr><td>3 — Honest no-results</td><td>Prevents the AI from inventing an answer when no relevant questions exist. Recursion is not in the OL papers — the AI should say so, not cite an unrelated question.</td></tr>
+                <tr><td>4 — No OCR quoting</td><td>OCR text is noisy (scan artefacts, formatting symbols). Reproducing it verbatim looks unprofessional and confuses students.</td></tr>
+                <tr><td>5 — Card auto-display</td><td>The question card opens automatically on ID citation. Without this rule, the AI would describe the question in full text, duplicating the information already visible in the card.</td></tr>
+                <tr><td>6 — Topic scope</td><td>Guards against students using the tool as a general-purpose chatbot (weather, homework help, etc.).</td></tr>
+                <tr><td>7 — No marking scheme speculation</td><td>Marking schemes are being assembled. Guessing answers could mislead students preparing for exams.</td></tr>
+            </tbody>
+        </table>
+
+        <hr class="section-divider">
+
+        <!-- ── LIMITATIONS ── -->
+        <h2 id="limitations">Current Limitations</h2>
+
+        <table>
+            <thead><tr><th>Limitation</th><th>Impact</th><th>Status</th></tr></thead>
+            <tbody>
+                <tr><td>MARKS field is 0 on all objects</td><td>Modal shows "—" for marks. No marks-based filtering possible.</td><td><span class="chip chip-warn">Data gap</span></td></tr>
+                <tr><td>TOPICS is empty on all objects</td><td>Topic tags absent in modal. Topic-based search/filter not available.</td><td><span class="chip chip-warn">Data gap</span></td></tr>
+                <tr><td>IMAGERY_POINTER is empty</td><td>Modal uses local <span class="inline-code">image_pointer</span> from OCR_TEXT_PAGES. No CDN fallback.</td><td><span class="chip chip-warn">Data gap</span></td></tr>
+                <tr><td>MARKING_POINTER is empty</td><td>"Marking" row in modal always shows "—".</td><td><span class="chip chip-warn">Data gap</span></td></tr>
+                <tr><td>No score threshold</td><td>LLM always receives 5 results. Weakly relevant context passed through.</td><td><span class="chip chip-info">By design</span></td></tr>
+                <tr><td>Conversation history grows unbounded</td><td>Long sessions will eventually exceed the OpenAI context window.</td><td><span class="chip chip-warn">Future work</span></td></tr>
+                <tr><td>Images served from local output/</td><td>Only works on the dev machine. No portable image hosting.</td><td><span class="chip chip-warn">Dev only</span></td></tr>
+                <tr><td>No auth or rate limiting</td><td>Open to any request on the local network.</td><td><span class="chip chip-warn">Dev only</span></td></tr>
+            </tbody>
+        </table>
+
+        <hr class="section-divider">
+
+        <!-- ── NEXT ── -->
+        <h2 id="next">What's Next</h2>
+
+        <ul>
+            <li><strong>Marking schemes</strong> — populate <span class="inline-code">MARKING_POINTER</span>; surface in modal as a direct link.</li>
+            <li><strong>CDN image hosting</strong> — populate <span class="inline-code">IMAGERY_POINTER</span> with cdn.pyca.ie URLs; drop local static file serving from FastAPI.</li>
+            <li><strong>Topic classifier</strong> — GPT-4o pass over each question's OCR text to populate <span class="inline-code">TOPICS</span>; unlocks filter-by-topic search.</li>
+            <li><strong>MARKS population</strong> — extract marks from marking scheme PDFs via OCR.</li>
+            <li><strong>Context window management</strong> — truncate or summarise older turns when history approaches the model's context limit.</li>
+            <li><strong>Production hardening</strong> — auth layer, rate limiting, error boundaries, loading skeletons in QuestionModal.</li>
+            <li><strong>Lookup Style 2</strong> — non-AI question browser: filter-by-topic/year/level grid with no chat, no LLM calls.</li>
+        </ul>
+
+    </main>
+</div>
+
+</body>
+</html>
