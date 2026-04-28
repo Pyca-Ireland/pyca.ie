@@ -2,7 +2,7 @@ import Image from "next/image"
 
 async function getAnnouncement(): Promise<string | null> {
   try {
-    const res = await fetch("https://cdn.pyca.ie/v1/globals/announcements/", {
+    const res = await fetch("https://api.pyca.ie/v1/globals/announcements/", {
       next: { revalidate: 60 },
     })
     if (!res.ok) return null
@@ -25,14 +25,15 @@ export default async function MainPage() {
         </h1>
       </div>
       )}
+      {(process.env.NODE_ENV === "production") && (
+      <div className="text-center bg-black border border-neutral-800 p-2">
+        <h1>
+          {announcement}
+        </h1>
+      </div>
+      )}
       <div className="min-h-screen flex justify-center px-4">
         <div className="my-8 w-full max-w-xl flex flex-col border border-neutral-800">
-          {announcement && (
-            <div className="text-center border border-x-0 border-t-0 border-neutral-800 p-2 text-sm">
-              {announcement}
-            </div>
-          )}
-
           <div className="relative w-full aspect-19/7 border border-x-0 border-t-0 border-neutral-800">
             <Image
               src="/pyca_banner_scaled.png"
