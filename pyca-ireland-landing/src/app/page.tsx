@@ -118,7 +118,7 @@ export default async function MainPage() {
           </div>
           
           <footer className="flex justify-center mb-4 text-xs">
-            <a href="https://github.com/Pyca-Ireland/lccs-audit"><u>LCCS Course Y"25 Audit</u></a>&nbsp;|&nbsp;educate@pyca.ie
+            <a href="https://github.com/Pyca-Ireland/lccs-audit"><u>LCCS Course Y&apos;25 Audit</u></a>&nbsp;|&nbsp;educate@pyca.ie
           </footer>
 
         </div>
